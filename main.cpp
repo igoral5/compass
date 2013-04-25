@@ -7,8 +7,8 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <locale>
 #include <exception>
+#include <iomanip>
 #include <stdint.h>
 #include <signal.h>
 #include <unistd.h>
@@ -45,7 +45,7 @@ main(int argc, char *argv[]) try
 		usleep(1000000);
 		MagnetometerRaw raw = compass.readRawAxis();
 		MagnetometerScaled scaled = compass.readScaledAxis();
-		int MilliGauss_OnThe_XAxis = scaled.XAxis;
+		// int MilliGauss_OnThe_XAxis = scaled.XAxis;
 		double heading = atan2(scaled.YAxis, scaled.XAxis);
 		double declinationAngle = 0.1821; // declination Angle in radians for Moscow
 		heading += declinationAngle;
@@ -54,10 +54,11 @@ main(int argc, char *argv[]) try
 		if(heading > 2*M_PI)
 			heading -= 2*M_PI;
 		double headingDegrees = heading * 180/M_PI;
-		std::cout << "Raw: " << raw.XAxis << " " << raw.YAxis << " " << raw.ZAxis
-				<< "\t" << "Scaled: " << scaled.XAxis << " " << scaled.YAxis << " "
-				<< scaled.ZAxis << "\t" << "Heading: " << heading << "\tRadians: " << headingDegrees
-				<< "\tDegrees" << std::endl;
+		std::cout << "Raw:" << std::setw(5) << raw.XAxis << std::setw(5) << raw.YAxis << std::setw(5)
+				<< raw.ZAxis << "   Scaled:" <<  std::fixed << std::setprecision(3) << std::setw(10) << scaled.XAxis
+				<<  std::setw(10) << scaled.YAxis <<  std::setw(10) << scaled.ZAxis << "   Heading: "
+				<< std::setprecision(6) << std::setw(10) << heading << " rad" << std::setw(12)
+				<< headingDegrees << " deg" << std::endl;
 	}
 	return EXIT_SUCCESS;
 }
