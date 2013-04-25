@@ -25,16 +25,8 @@ union i2c_smbus_data
 {
     uint8_t byte;
     uint16_t word;
-    uint8_t block[I2C_SMBUS_BLOCK_MAX + 2]; /* block[0] is used for length */
+    uint8_t block[I2C_SMBUS_BLOCK_MAX + 2]; // block[0] is used for length
 };
-
-/* struct i2c_smbus_ioctl_data
-{
-    char read_write;
-    uint8_t command;
-    int size;
-    union i2c_smbus_data *data;
-}; */
 
 class I2cError : public std::runtime_error
 {
