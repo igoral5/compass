@@ -10,7 +10,7 @@
 
 #include <string>
 #include <stdexcept>
-#include <cstdint>
+#include <stdint.h>
 #include <stdexcept>
 
 #define I2C_SMBUS_READ 1
@@ -28,20 +28,20 @@ union i2c_smbus_data
     uint8_t block[I2C_SMBUS_BLOCK_MAX + 2]; /* block[0] is used for length */
 };
 
-struct i2c_smbus_ioctl_data
+/* struct i2c_smbus_ioctl_data
 {
     char read_write;
     uint8_t command;
     int size;
     union i2c_smbus_data *data;
-};
+}; */
 
 class I2cError : public std::runtime_error
 {
 public:
     explicit I2cError(const std::string& text_error) : std::runtime_error( text_error ) {}
     virtual ~I2cError() throw() {}
-}
+};
 
 class I2c
 {

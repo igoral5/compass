@@ -42,7 +42,7 @@ class CompassError : public std::runtime_error
 public:
     explicit CompassError(const std::string& text_error) : std::runtime_error(text_error) {}
     virtual ~CompassError() throw() {}
-}
+};
 
 class Compass
 {

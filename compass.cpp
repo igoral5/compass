@@ -25,9 +25,12 @@ MagnetometerRaw Compass::readRawAxis()
         buffer[ind] = wire_.i2c_smbus_read_byte_data(reg);
     }
     MagnetometerRaw raw = MagnetometerRaw();
-    raw.XAxis = (buffer[0] << 8) | buffer[1];
-    raw.ZAxis = (buffer[2] << 8) | buffer[3];
-    raw.YAxis = (buffer[4] << 8) | buffer[5];
+    short int tmp = (buffer[0] << 8) | buffer[1];
+    raw.XAxis = tmp;
+    tmp = (buffer[2] << 8) | buffer[3];
+    raw.ZAxis = tmp;
+    tmp = (buffer[4] << 8) | buffer[5];
+    raw.YAxis = tmp;
     return raw;
 }
 

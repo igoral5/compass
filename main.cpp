@@ -10,14 +10,55 @@
 #include <locale>
 #include <exception>
 #include <stdint.h>
+#include <signal.h>
+#include <unistd.h>
+#include <cmath>
 #include "i2c.h"
 #include "compass.h"
+
+#define NAME_FILE "/dev/i2c-1"
+
+volatile bool work = true;
+
+void
+sig_handler(int signo)
+{
+	work = false;
+}
 
 int
 main(int argc, char *argv[]) try 
 {
-	std::locale::global(std::locale(""));
-	uint8_t i;
+	struct sigaction act;
+	act.sa_handler = sig_handler;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = 0;
+	if (sigaction(SIGINT, &act, NULL) < 0)
+	{
+		throw std::runtime_error("Error set signal handler");
+	}
+	Compass compass(NAME_FILE);
+	compass.setScale(1.3);
+	compass.setMeasurementMode(MEASUREMENT_CONTINUOUS);
+	while (work)
+	{
+		usleep(1000000);
+		MagnetometerRaw raw = compass.readRawAxis();
+		MagnetometerScaled scaled = compass.readScaledAxis();
+		int MilliGauss_OnThe_XAxis = scaled.XAxis;
+		double heading = atan2(scaled.YAxis, scaled.XAxis);
+		double declinationAngle = 0.1821; // declination Angle in radians for Moscow
+		heading += declinationAngle;
+		if(heading < 0)
+			heading += 2*M_PI;
+		if(heading > 2*M_PI)
+			heading -= 2*M_PI;
+		double headingDegrees = heading * 180/M_PI;
+		std::cout << "Raw: " << raw.XAxis << " " << raw.YAxis << " " << raw.ZAxis
+				<< "\t" << "Scaled: " << scaled.XAxis << " " << scaled.YAxis << " "
+				<< scaled.ZAxis << "\t" << "Heading: " << heading << "\tRadians: " << headingDegrees
+				<< "\tDegrees" << std::endl;
+	}
 	return EXIT_SUCCESS;
 }
 catch(const std::exception& er)

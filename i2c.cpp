@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
+#include <unistd.h>
 
 I2c::I2c(const std::string& name_file)
 {
@@ -27,7 +28,7 @@ I2c::I2c(const std::string& name_file, uint16_t slave_address)
 
 I2c::~I2c() throw()
 {
-    close(fd_);
+    ::close(fd_);
 }
 
 void I2c::i2c_smbus_set_slave(uint16_t slave_address)
