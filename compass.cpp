@@ -13,6 +13,13 @@ Compass::Compass(const std::string& name_file) : wire_( name_file, HMC5883L_ADDR
 
 Compass::~Compass() throw()
 {
+    try
+    {
+        setMeasurementMode(MEASUREMENT_IDLE);
+    }
+    catch(...)
+    {
+    }
 }
 
 MagnetometerRaw Compass::readRawAxis()

@@ -54,15 +54,14 @@ main(int argc, char *argv[]) try
 		usleep(1000000);
 		MagnetometerRaw raw = compass.readRawAxis();
 		MagnetometerScaled scaled = compass.readScaledAxis();
-		// int MilliGauss_OnThe_XAxis = scaled.XAxis;
 		double heading = atan2(scaled.YAxis, scaled.XAxis);
-		double declinationAngle = 0.1821; // declination Angle in radians for Moscow
+		double declinationAngle = 0.1821; // magnetic declination in radians for Moscow
 		heading += declinationAngle;
 		if(heading < 0)
-			heading += 2*M_PI;
-		if(heading > 2*M_PI)
-			heading -= 2*M_PI;
-		double headingDegrees = heading * 180/M_PI;
+			heading += 2 * M_PI;
+		if(heading > 2 * M_PI)
+			heading -= 2 * M_PI;
+		double headingDegrees = heading * 180 / M_PI;
 		std::cout << "Raw:" << std::setw(5) << raw.XAxis << std::setw(5) << raw.YAxis << std::setw(5)
 				<< raw.ZAxis << "   Scaled:" <<  std::fixed << std::setprecision(3) << std::setw(10) << scaled.XAxis
 				<<  std::setw(10) << scaled.YAxis <<  std::setw(10) << scaled.ZAxis << "   Heading:"
