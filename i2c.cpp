@@ -43,7 +43,7 @@ void I2c::open(const std::string& name_file)
 {
     if ( ( fd_ = ::open(name_file.c_str(), O_RDWR ) ) < 0 )
     {
-        throw I2cError(strerror(errno));
+        throw I2cError(name_file + ": " + strerror(errno));
     }
 }
 

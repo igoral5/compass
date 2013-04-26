@@ -9,13 +9,14 @@
 #include <cstdlib>
 #include <exception>
 #include <iomanip>
+#include <sstream>
 #include <stdint.h>
 #include <signal.h>
 #include <unistd.h>
 #include <cmath>
 #include "compass.h"
 
-#define NAME_FILE "/dev/i2c-1"
+#define NAME_FILE "/dev/i2c-"
 
 volatile bool work = true;
 
@@ -28,7 +29,14 @@ sig_handler(int signo)
 int
 main(int argc, char *argv[]) try 
 {
-	struct sigaction act;
+	if (argc != 2)
+	{
+	    std::cerr << argv[0] << ": Need argument - the number of the channel" << std::endl;
+	    std::cerr << "\tUsage: " << argv[0] << " n " << std::endl;
+	    std::cerr << "\tWhere n = 0,1,2..." << std::endl;
+	    return EXIT_FAILURE;
+	}
+    struct sigaction act;
 	act.sa_handler = sig_handler;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = 0;
@@ -36,7 +44,9 @@ main(int argc, char *argv[]) try
 	{
 		throw std::runtime_error("Error set signal handler");
 	}
-	Compass compass(NAME_FILE);
+	std::ostringstream oss;
+	oss << NAME_FILE << argv[1];
+	Compass compass(oss.str());
 	compass.setScale(1.3);
 	compass.setMeasurementMode(MEASUREMENT_CONTINUOUS);
 	while (work)
@@ -63,11 +73,11 @@ main(int argc, char *argv[]) try
 }
 catch(const std::exception& er)
 {
-	std::cerr << argv[0] << " : " << er.what() << std::endl;
+	std::cerr << argv[0] << ": " << er.what() << std::endl;
 	return EXIT_FAILURE;
 }
 catch(...) 
 {
-    std::cerr << argv[0] << " : Unknown error" << std::endl;
+    std::cerr << argv[0] << ": Unknown error" << std::endl;
 	return EXIT_FAILURE;
 }
