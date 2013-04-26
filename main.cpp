@@ -13,7 +13,6 @@
 #include <signal.h>
 #include <unistd.h>
 #include <cmath>
-#include "i2c.h"
 #include "compass.h"
 
 #define NAME_FILE "/dev/i2c-1"
