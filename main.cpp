@@ -63,10 +63,10 @@ main(int argc, char *argv[]) try
 			heading -= 2 * M_PI;
 		double headingDegrees = heading * 180 / M_PI;
 		std::cout << "Raw:" << std::setw(5) << raw.XAxis << std::setw(5) << raw.YAxis << std::setw(5)
-				<< raw.ZAxis << "   Scaled:" <<  std::fixed << std::setprecision(3) << std::setw(10) << scaled.XAxis
-				<<  std::setw(10) << scaled.YAxis <<  std::setw(10) << scaled.ZAxis << "   Heading:"
-				<< std::setprecision(6) << std::setw(10) << heading << " rad" << std::setw(12)
-				<< headingDegrees << " deg" << std::endl;
+				<< raw.ZAxis << "   Scaled:" <<  std::fixed << std::setprecision(3) << std::setw(10)
+				<< scaled.XAxis	<< std::setw(10) << scaled.YAxis << std::setw(10) << scaled.ZAxis
+				<< "   Heading:" << std::setprecision(6) << std::setw(10) << heading << " rad"
+				<< std::setprecision(2) << std::setw(8) << headingDegrees << " deg" << std::endl;
 	}
 	return EXIT_SUCCESS;
 }
